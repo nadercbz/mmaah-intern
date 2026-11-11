@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#fcfaf7" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Mmaah Intern" />
+<link rel="icon" type="image/png" href="marke/mark_96.png" />
+<link rel="apple-touch-icon" href="marke/mark_256.png" />
+<title>Mmaah Intern</title>
+<style>
+@font-face{font-family:Archivo;src:url(fonts/archivo.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:Geist;src:url(fonts/geist.woff2) format("woff2");font-weight:100 900;font-display:swap}
+:root{--creme:#fcfaf7;--tinte:#1c1216;--grau:#8a7f78;--linie:#e8e1d8;--orange:#ff4005}
+html,body{margin:0;height:100%;background:var(--creme);color:var(--tinte);overscroll-behavior:none}
+body{position:fixed;inset:0;display:grid;place-items:center;font-family:Geist,ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.col{display:flex;flex-direction:column;align-items:center;padding:24px}
+.logo{width:64px;height:64px;border-radius:16px}
+h1{margin:18px 0 4px;font:700 26px/1.1 Archivo,sans-serif;font-stretch:90%;letter-spacing:-.01em}
+.sub{font-size:13px;color:var(--grau);min-height:18px}
+.sub.err{color:var(--orange)}
+.dots{display:flex;gap:16px;margin:26px 0 30px}
+.dots.shake{animation:shake .42s cubic-bezier(.36,.07,.19,.97)}
+.dot{width:13px;height:13px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--tinte);transition:background .12s}
+.dot.on{background:var(--orange);box-shadow:inset 0 0 0 1.5px var(--orange)}
+.pad{display:grid;grid-template-columns:repeat(3,76px);gap:16px 24px}
+.key{width:76px;height:76px;border-radius:50%;border:1px solid var(--linie);color:var(--tinte);cursor:pointer;background:#fff;font:300 30px/1 Archivo,sans-serif;display:grid;place-items:center;transition:background .15s,transform .1s}
+.key:active,.key.hit{background:#f3ece4;transform:scale(.96)}
+.key.ghost{background:transparent;border-color:transparent;font:500 13px Geist,sans-serif;color:var(--grau)}
+.remember{margin-top:28px;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--grau);cursor:pointer}
+.remember input{accent-color:var(--orange);width:15px;height:15px;margin:0}
+.busy .pad,.busy .remember{opacity:.35;pointer-events:none}
+@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+@media (max-height:640px){.pad{gap:10px 20px}.key{width:64px;height:64px;font-size:26px}.dots{margin:18px 0 20px}}
+</style>
+</head>
+<body>
+<div class="col" id="col">
+  <img class="logo" src="marke/mark_256.png" alt="" />
+  <h1>Mmaah Intern</h1>
+  <div class="sub" id="sub">Lade …</div>
+  <div class="dots" id="dots"></div>
+  <div class="pad" id="pad"></div>
+  <label class="remember"><input type="checkbox" id="remember" checked /> Auf diesem Gerät merken</label>
+</div>
+<script>
+(() => {
+  // Alles liegt verschlüsselt auf GitHub (AES-256-GCM, Schlüssel per PBKDF2 aus dem Code). Der Code steht nirgends.
+  // Nach dem Entsperren liegt der Schlüssel nur in diesem Browser (IndexedDB), der Service Worker entschlüsselt damit Bilder, Videos und Texte beim Laden.
+  const DBN = "mmaah-intern-v1"
+  const col = document.getElementById("col"), sub = document.getElementById("sub"), dotsEl = document.getElementById("dots"), pad = document.getElementById("pad"), remember = document.getElementById("remember")
+  let code = "", meta = null, busy = false, LEN = 6
+  const ls = {
+    get: (k) => { try { return localStorage.getItem(k) } catch { return null } },
+    set: (k, v) => { try { localStorage.setItem(k, v) } catch {} },
+    del: (k) => { try { localStorage.removeItem(k) } catch {} },
+  }
+  const idb = () => new Promise((res, rej) => {
+    const r = indexedDB.open(DBN, 1)
+    r.onupgradeneeded = () => r.result.createObjectStore("kv")
+    r.onsuccess = () => res(r.result)
+    r.onerror = () => rej(r.error)
+  })
+  const idbSet = async (k, v) => { const db = await idb(); await new Promise((res, rej) => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").put(v, k); t.oncomplete = res; t.onerror = () => rej(t.error) }) }
+  const idbGet = async (k) => { const db = await idb(); return new Promise((res) => { const g = db.transaction("kv").objectStore("kv").get(k); g.onsuccess = () => res(g.result || null); g.onerror = () => res(null) }) }
+  const idbDel = async (k) => { const db = await idb(); await new Promise((res) => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").delete(k); t.oncomplete = res; t.onerror = res }) }
+  const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))
+
+  function paint() { dotsEl.querySelectorAll(".dot").forEach((d, i) => d.classList.toggle("on", i < code.length)) }
+  function setBusy(on, text) { busy = on; col.classList.toggle("busy", on); sub.classList.remove("err"); sub.textContent = text || "Code eingeben" }
+  function fail(text) {
+    setBusy(false); sub.textContent = text; sub.classList.add("err")
+    dotsEl.classList.remove("shake"); void dotsEl.offsetWidth; dotsEl.classList.add("shake")
+    code = ""; paint()
+  }
+
+  function build() {
+    dotsEl.innerHTML = ""
+    for (let i = 0; i < LEN; i++) dotsEl.appendChild(Object.assign(document.createElement("span"), { className: "dot" }))
+    pad.innerHTML = ""
+    for (const k of ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "⌫"]) {
+      const b = document.createElement("button")
+      b.type = "button"; b.className = "key" + (k === "" || k === "⌫" ? " ghost" : "")
+      b.textContent = k === "⌫" ? "Löschen" : k
+      if (k === "") b.style.visibility = "hidden"
+      b.dataset.k = k; b.addEventListener("click", () => press(k)); pad.appendChild(b)
+    }
+  }
+
+  async function derive(pin) {
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pin), "PBKDF2", false, ["deriveKey"])
+    return crypto.subtle.deriveKey({ name: "PBKDF2", salt: unb64(meta.salt), iterations: meta.iter, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"])
+  }
+  async function verify(key) {
+    const r = await fetch("c/katalog.bin", { cache: "no-cache" })
+    if (!r.ok) throw new Error("katalog " + r.status)
+    const u8 = new Uint8Array(await r.arrayBuffer())
+    await crypto.subtle.decrypt({ name: "AES-GCM", iv: u8.slice(0, 12) }, key, u8.slice(12))
+  }
+  async function enter() {
+    setBusy(true, "Öffne …")
+    await navigator.serviceWorker.register("sw.js")
+    await navigator.serviceWorker.ready
+    location.replace("app.html")
+  }
+  async function tryPin() {
+    setBusy(true, "Entsperre …")
+    try {
+      const key = await derive(code)
+      await verify(key)
+      const keep = remember.checked
+      await idbSet("key", { key, exp: Date.now() + (keep ? 400 : 0.5) * 86400000 })
+      ls.set("mi-remember", keep ? "1" : "0")
+      await enter()
+    } catch (e) {
+      fail(e && e.name === "OperationError" ? "Falscher Code" : "Fehler beim Entsperren")
+    }
+  }
+  function press(k) {
+    if (busy || !meta) return
+    if (k === "⌫") code = code.slice(0, -1)
+    else if (/^[0-9]$/.test(k) && code.length < LEN) code += k
+    paint()
+    if (code.length === LEN) tryPin()
+  }
+  window.addEventListener("keydown", (e) => {
+    if (/^[0-9]$/.test(e.key)) press(e.key)
+    else if (e.key === "Backspace") press("⌫")
+    else return
+    const b = pad.querySelector('[data-k="' + (e.key === "Backspace" ? "⌫" : e.key) + '"]')
+    if (b) { b.classList.add("hit"); setTimeout(() => b.classList.remove("hit"), 120) }
+  })
+
+  ;(async () => {
+    if (!window.crypto || !crypto.subtle || !("serviceWorker" in navigator)) return (build(), fail("Dieser Browser ist zu alt für Mmaah Intern"))
+    try {
+      meta = await (await fetch("meta.json", { cache: "no-cache" })).json()
+      LEN = meta.len || 6
+    } catch { build(); return fail("Daten nicht erreichbar") }
+    build()
+    if (location.hash === "#lock") {
+      await idbDel("key").catch(() => {}); ls.del("mi-remember")
+      history.replaceState(null, "", location.pathname)
+    } else if (ls.get("mi-remember") === "1") {
+      const v = await idbGet("key").catch(() => null)
+      if (v && v.exp > Date.now()) { try { await verify(v.key); return enter() } catch { await idbDel("key").catch(() => {}); ls.del("mi-remember") } }
+    }
+    setBusy(false)
+  })()
+})()
+</script>
+</body>
+</html>

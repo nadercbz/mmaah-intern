@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="de"><head><meta name="robots" content="noindex, nofollow"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mmaah! Intern</title><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#fcfaf7">
+<link rel="icon" href="marke/mark_96.png">
+<style>
+@font-face{font-family:Archivo;src:url(fonts/archivo.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:Geist;src:url(fonts/geist.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Geist Mono";src:url(fonts/geist-mono.woff2) format("woff2");font-weight:400;font-display:swap}
+:root{--o:#ff4005;--o2:#d93600;--os:#fff0e8;--p:#4f0423;--b:#3b8bff;--g:#fde233;
+ --bg:#fcfaf7;--pan:#fff;--ink:#1d1418;--ink2:#6b6064;--ink3:#a1969a;--line:#ece5e0;--line2:#ddd3cc;--soft:#f5f1ed;
+ --rail:240px;--bar:56px;--px:clamp(16px,3.2cqw,48px);
+ --sh:0 1px 2px rgba(29,20,24,.04);--sh2:0 12px 32px -14px rgba(29,20,24,.22)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--bar) + 14px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Geist,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}a{color:inherit}img,video,iframe{display:block}
+h1,h2,h3,p{margin:0}
+.mono{font:400 11.5px/1.4 "Geist Mono",ui-monospace,monospace}
+:focus-visible{outline:2px solid var(--b);outline-offset:2px;border-radius:6px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--d,var(--ink3));flex:none}
+
+/* Leiste links */
+.rail{position:fixed;z-index:60;inset:0 auto 0 0;width:var(--rail);background:var(--pan);border-right:1px solid var(--line);display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent;padding:0 12px}
+.logo{display:flex;align-items:center;gap:10px;padding:20px 8px 16px;text-decoration:none}
+.logo img{width:86px;height:auto}
+.logo span{color:var(--ink3);padding-top:4px}
+.gr{padding:12px 0 2px}.gr+.gr{border-top:1px solid transparent}
+.gr h3{display:flex;align-items:center;gap:7px;font:500 11px/1 Geist;letter-spacing:.06em;text-transform:uppercase;padding:0 8px 7px;color:var(--ink3)}
+.gr h3 .dot{width:6px;height:6px}
+.rail a.pkt{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;text-decoration:none;font-size:13.5px;color:var(--ink2);line-height:1.3;transition:background .12s,color .12s}
+.rail a.pkt span{flex:1}.rail a.pkt i{font:400 11px "Geist Mono",monospace;color:var(--ink3);font-style:normal}
+.rail a.pkt:hover{background:var(--soft);color:var(--ink)}
+.rail a.pkt[aria-current=page]{background:var(--os);color:var(--ink);font-weight:600}
+.rail a.pkt[aria-current=page] i{color:var(--o2)}
+.rail .fuss{margin-top:auto;padding:18px 8px 20px;color:var(--ink3);font-size:11.5px;line-height:1.45}
+.schleier{position:fixed;inset:0;background:rgba(29,20,24,.3);z-index:55;display:none}
+
+/* Suchleiste */
+.haupt{margin-left:var(--rail);min-height:100dvh;container-type:inline-size;container-name:h}
+.bar{position:sticky;top:0;z-index:40;height:var(--bar);display:flex;align-items:center;gap:12px;padding:0 var(--px);background:rgba(252,250,247,.84);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.menue{display:none;width:40px;height:40px;margin-left:-8px;border:0;background:none;cursor:pointer;flex:none;align-items:center;justify-content:center;border-radius:8px}
+.menue:hover{background:var(--soft)}
+.such{flex:1;position:relative;max-width:520px}
+.such svg{position:absolute;left:12px;top:11px;color:var(--ink3);pointer-events:none}
+.such input{width:100%;height:36px;border:1px solid transparent;border-radius:10px;padding:0 52px 0 36px;background:var(--soft);outline:0;transition:background .15s,border-color .15s,box-shadow .15s;-webkit-appearance:none}
+.such input:focus{background:#fff;border-color:var(--line2);box-shadow:0 0 0 4px var(--os)}
+.such input::placeholder{color:var(--ink3)}
+.such kbd{position:absolute;right:9px;top:8px;font:500 11px/1.5 "Geist Mono",monospace;color:var(--ink3);border:1px solid var(--line);border-radius:6px;padding:0 6px;background:#fff}
+.barzahl{margin-left:auto;color:var(--ink3);white-space:nowrap}
+
+/* Kopf je Bereich */
+.band{padding:clamp(28px,4cqw,52px) var(--px) clamp(16px,2.4cqw,24px)}
+.ober{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px;color:var(--ink3);font-size:12.5px}
+.ober .grp{display:inline-flex;align-items:center;gap:7px;color:var(--ink2);font-weight:500}
+.pille{display:inline-flex;align-items:center;gap:6px;padding:1px 9px 1px 8px;border-radius:99px;font:500 12px/1.7 Geist;background:var(--pan);border:1px solid var(--line);color:var(--ink2)}
+.pille:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sc,#d4a106)}
+.band h1{font:700 clamp(30px,4.4cqw,50px)/1.04 Archivo;letter-spacing:-.03em;color:var(--ink);overflow-wrap:anywhere}
+.band .text{margin-top:10px;max-width:64ch;font-size:15px;color:var(--ink2)}
+.band .hinweis{margin-top:16px;max-width:80ch;font-size:13px;color:var(--ink2);background:var(--pan);border:1px solid var(--line);border-radius:10px;padding:10px 14px 10px 34px;position:relative}
+.band .hinweis:before{content:"";position:absolute;left:14px;top:16px;width:7px;height:7px;border-radius:50%;background:#e0b800;box-shadow:0 0 0 3px #fbf2c4}
+.tasten{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.tast{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--pan);font:500 13px Geist;text-decoration:none;cursor:pointer;color:var(--ink);box-shadow:var(--sh);transition:border-color .12s,background .12s;white-space:nowrap}
+.tast:hover{border-color:var(--line2);background:var(--soft)}
+.sprung{display:flex;gap:2px;overflow-x:auto;padding:8px var(--px);border-bottom:1px solid var(--line);border-top:1px solid var(--line);position:sticky;top:var(--bar);background:rgba(252,250,247,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:20;scrollbar-width:none}
+.sprung::-webkit-scrollbar{display:none}
+.sprung a{flex:none;font-size:13px;padding:5px 10px;border-radius:8px;color:var(--ink2);text-decoration:none;white-space:nowrap}
+.sprung a:hover{background:var(--soft);color:var(--ink)}
+
+/* Teile und Kacheln */
+.teil{padding:clamp(22px,3cqw,34px) var(--px) 6px}
+.tk{display:flex;align-items:baseline;gap:10px;margin-bottom:2px}
+.tk h2{font:600 15px/1.3 Geist;letter-spacing:-.005em;color:var(--ink)}
+.tk h2 a{text-decoration:none}
+.tk .mono{color:var(--ink3)}
+.tk .mehr{margin-left:auto;text-decoration:none;color:var(--ink2);font-size:13px}
+.tk .mehr:hover{color:var(--o2)}
+.tt{font-size:13px;color:var(--ink2);margin:2px 0 4px;max-width:72ch}
+.raster{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(var(--min,200px),100%),1fr));gap:22px 16px;margin-top:14px}
+.kachel{all:unset;display:block;cursor:pointer;min-width:0;position:relative}
+.kachel:focus-visible{outline:2px solid var(--b);outline-offset:4px;border-radius:10px}
+.bild{position:relative;aspect-ratio:var(--f,1/1);background:var(--tb,var(--soft));border-radius:10px;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease}
+.kachel:hover .bild{transform:translateY(-2px);box-shadow:var(--sh2)}
+.bild img,.bild video{width:100%;height:100%;object-fit:var(--fit,contain)}
+.bild.leer::after{content:attr(data-e);position:absolute;inset:0;display:grid;place-items:center;font:500 12px "Geist Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.spiel{position:absolute;right:8px;bottom:8px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center;pointer-events:none;box-shadow:0 2px 8px rgba(29,20,24,.16)}
+.spiel:after{content:"";margin-left:2px;border-left:8px solid var(--ink);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.nm{display:block;margin-top:9px;font-size:13px;font-weight:500;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.mt{display:block;margin-top:2px;color:var(--ink3);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doks{background:var(--pan);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:12px}
+.dokz{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1px 16px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;width:100%;text-decoration:none;color:inherit;transition:background .12s}
+.dokz:first-child{border-top:0}
+.dokz:hover{background:var(--soft)}.dokz:focus-visible{outline:2px solid var(--b);outline-offset:-2px}
+.dokz b{font-weight:500;font-size:14px;line-height:1.35}.dokz .mono{color:var(--ink3);grid-row:span 2;white-space:nowrap;padding-top:2px}
+.dokz small{font-size:12.5px;color:var(--ink2);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.farben{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:14px}
+.farbe{all:unset;cursor:pointer;border-radius:12px;padding:14px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;box-shadow:inset 0 0 0 1px rgba(29,20,24,.08);transition:transform .15s}
+.farbe:hover{transform:translateY(-2px)}
+.farbe:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+.farbe b{font:600 15px/1.2 Geist}
+.fehlt{margin-top:12px;padding:14px 16px;background:var(--pan);border:1px dashed var(--line2);border-radius:12px;font-size:13.5px;color:var(--ink2)}
+
+/* Eingebettete Seiten */
+.webbar{display:inline-flex;gap:2px;margin:14px 0 12px;align-items:center;background:var(--soft);padding:3px;border-radius:10px}
+.webbar button,.webbar a{height:30px;padding:0 12px;border-radius:8px;border:0;background:none;font:500 13px Geist;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;color:var(--ink2)}
+.webbar button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(29,20,24,.1)}
+.webbar a:hover{color:var(--ink)}
+.webrahmen{background:var(--soft);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;justify-content:center}
+.webrahmen iframe{border:0;width:100%;height:min(78vh,860px);background:#fff;transition:width .22s ease}
+.webrahmen.hoch iframe{height:calc(100dvh - var(--bar) - 150px);min-height:520px}
+.vollrahmen{border:0;width:100%;height:calc(100dvh - var(--bar))}
+
+/* Übersicht */
+.start{padding:clamp(30px,4.4cqw,56px) var(--px) 6px}
+.start .ober{margin-bottom:12px}
+.start h1{font:700 clamp(32px,4.6cqw,54px)/1.02 Archivo;letter-spacing:-.035em}
+.start .sub{margin-top:8px;color:var(--ink2);font-size:15px;max-width:60ch}
+.jetzt{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:26px}
+.jz{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-height:104px;padding:14px 16px;background:var(--pan);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);transition:border-color .15s,transform .15s,box-shadow .15s}
+.jz:hover{border-color:var(--line2);transform:translateY(-1px);box-shadow:var(--sh2)}
+.jz:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+.jz span{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink2);line-height:1.3}
+.jz b{font:600 32px/1 Archivo;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.jz.warn b{color:var(--o)}
+.woche{padding:clamp(24px,3.2cqw,38px) var(--px) 0}
+.liste{background:var(--pan);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:12px}
+.post{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:16px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);text-decoration:none;transition:background .12s}
+.post:first-child{border-top:0}
+.post:hover{background:var(--soft)}
+.post>.mono{color:var(--ink3)}
+.post .pt{min-width:0}.post .pt b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post .pt small{display:block;color:var(--ink3);font-size:12px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post .st{display:inline-flex;gap:7px;align-items:center;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+.post.zeile{grid-template-columns:minmax(0,1fr) auto}
+.post.zeile .st{color:var(--ink3);font-size:15px}
+.post.zeile:hover .st{color:var(--o2)}
+.gruppe{display:flex;align-items:center;gap:8px;margin:22px 0 0;font-size:12px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3)}
+.gruppe:first-of-type{margin-top:6px}
+.karten{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:24px 16px;margin-top:12px}
+.karte{display:block;text-decoration:none;min-width:0;animation:auf .45s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i)*22ms)}
+.karte:focus-visible{outline:2px solid var(--b);outline-offset:4px;border-radius:12px}
+.cv{display:block;position:relative;aspect-ratio:16/11;border-radius:12px;overflow:hidden;background:var(--kb,var(--soft));transition:transform .2s ease,box-shadow .2s ease}
+.karte:hover .cv{transform:translateY(-2px);box-shadow:var(--sh2)}
+.cv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.karte:hover .cv img{transform:scale(1.03)}
+.cv.av img{object-fit:contain;padding:14%}
+.cv .ini{position:absolute;inset:0;display:grid;place-items:center;font:600 44px/1 Archivo;letter-spacing:-.04em;color:var(--kt,var(--ink3))}
+.kt{display:flex;align-items:center;gap:8px;margin-top:10px}
+.kt b{font-weight:600;font-size:14px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kt i{font:400 11px "Geist Mono",monospace;color:var(--ink3);font-style:normal}
+.karte small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink2);font-size:12.5px;line-height:1.4;margin-top:3px}
+.neu{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(190px,21%,262px);gap:16px;overflow-x:auto;padding:14px 0 10px;margin-top:2px;scroll-snap-type:x proximity;scrollbar-width:none;overscroll-behavior-x:contain}
+.neu::-webkit-scrollbar{display:none}
+.neu .karte{scroll-snap-align:start}
+.neu .cv{aspect-ratio:4/5}
+.cv .badge{position:absolute;left:8px;top:8px;z-index:2;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.95);color:var(--ink);border-radius:99px;padding:2px 10px 2px 8px;font:500 11.5px/1.7 Geist;box-shadow:0 2px 8px rgba(29,20,24,.14)}
+.cv .badge:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--o)}
+.ende{height:72px}
+@keyframes auf{from{opacity:0;transform:translateY(8px)}}
+
+/* Text */
+.dok{padding:clamp(24px,3.4cqw,44px) var(--px) 72px;max-width:860px}
+.zurueck{display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;font-size:13px;color:var(--ink2);text-decoration:none}
+.zurueck:hover{color:var(--ink)}
+.dokt{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 26px}
+.dok h1{font:700 clamp(28px,4cqw,42px)/1.08 Archivo;letter-spacing:-.03em;margin:0 0 14px;overflow-wrap:anywhere}
+.dok h2{font:600 19px/1.3 Geist;letter-spacing:-.01em;margin:34px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+.dok h3{font-weight:600;font-size:15.5px;margin:24px 0 6px}
+.dok p,.dok ul,.dok ol,.dok blockquote,.dok pre,.dok .tab{margin:0 0 12px}
+.dok{font-size:15px;line-height:1.65}
+.dok ul,.dok ol{padding-left:20px}.dok li{margin-bottom:4px}
+.dok blockquote{border-left:2px solid var(--o);padding-left:14px;color:var(--ink2)}
+.dok code{font:400 .85em "Geist Mono",monospace;background:var(--soft);padding:1px 5px;border-radius:5px;overflow-wrap:anywhere}
+.dok pre{background:var(--ink);color:#efe8ea;padding:16px;border-radius:12px;overflow:auto;font:400 12.5px/1.6 "Geist Mono",monospace;white-space:pre}
+.dok pre code{background:none;padding:0;color:inherit}
+.dok .tab{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+.dok table{border-collapse:collapse;font-size:13px;min-width:100%;line-height:1.45}
+.dok th{text-align:left;font-weight:500;color:var(--ink2);background:var(--soft);white-space:nowrap}.dok th,.dok td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.dok tr:last-child td{border-bottom:0}
+.dok a{color:#1d63cf}
+.dok.breit{max-width:none}
+
+/* Großansicht */
+dialog#lb{border:0;padding:0;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;background:#0f0d0e;color:#efe8ea}
+dialog#lb::backdrop{background:#0f0d0e}
+.lbg{display:grid;grid-template-columns:minmax(0,1fr) 320px;height:100%;outline:0}
+.buehne{position:relative;min-height:0;display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden}
+.buehne.voll{overflow:auto;display:block;padding:0}.buehne.voll img{max-width:none;max-height:none;width:auto;height:auto;cursor:zoom-out}
+.buehne img,.buehne video{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px}
+.buehne img{cursor:zoom-in;width:100%;height:100%}.buehne .vek{background:var(--bg);padding:24px;width:min(90%,900px);height:min(90%,900px)}.buehne .vek.dunkel{background:var(--p)}
+.buehne iframe{width:100%;height:100%;border:0;background:#fff;border-radius:6px}
+.buehne .typg{font:500 clamp(28px,5vw,56px) "Geist Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:#6d6366}
+.pfeil{position:absolute;top:50%;margin-top:-22px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:20px;line-height:1;z-index:3;transition:background .15s}
+.pfeil:hover{background:rgba(255,255,255,.2)}.pfeil.l{left:14px}.pfeil.r{right:14px}.pfeil[disabled]{display:none}
+.info{background:#171415;border-left:1px solid #262122;padding:64px 20px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;font-size:13.5px}
+.info .wo{color:#8f8589}.info h2{font:600 18px/1.3 Geist;letter-spacing:-.01em;overflow-wrap:anywhere}
+.fass{display:grid;gap:6px}
+.fz{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;padding:8px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);border-radius:10px}
+.fz span{min-width:0}.fz small{display:block;color:#8f8589;font:400 11px "Geist Mono",monospace}
+.fz a{height:30px;padding:0 11px;border-radius:8px;background:#fff;color:var(--ink);font:500 12.5px Geist;text-decoration:none;display:inline-flex;align-items:center}
+.fz a.zwei{background:none;color:#efe8ea;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.klein{display:flex;gap:6px;flex-wrap:wrap}
+.klein button{height:32px;padding:0 12px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:none;color:#efe8ea;font:500 13px Geist;cursor:pointer}
+.klein button:hover{background:rgba(255,255,255,.1)}
+.pfad{color:#6d6366;overflow-wrap:anywhere}
+.schliess{position:absolute;top:12px;right:12px;z-index:5;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.1);color:#fff;font-size:20px;line-height:1;cursor:pointer;transition:background .15s}
+.schliess:hover{background:rgba(255,255,255,.22)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:10px;z-index:99;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+mark{background:#fff0a8;color:inherit;padding:0 1px;border-radius:2px}
+
+@media(max-width:999px){
+ .rail{transform:translateX(-102%);transition:transform .24s cubic-bezier(.2,.7,.2,1);width:min(84vw,300px);box-shadow:0 0 40px rgba(29,20,24,.12)}
+ body.nav .rail{transform:none}body.nav .schleier{display:block}
+ .haupt{margin-left:0}.menue{display:flex}.barzahl,.such kbd{display:none}.such{max-width:none}.such input{padding-right:14px}
+ .lbg{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
+ .buehne{padding:10px}
+ .info{max-height:44dvh;padding:16px 16px calc(16px + env(safe-area-inset-bottom));border-left:0;border-top:1px solid #262122}.info h2{font-size:16px}
+ .pfeil{width:40px;height:40px;margin-top:-20px}.pfeil.l{left:6px}.pfeil.r{right:6px}
+}
+@media(max-width:560px){
+ .raster{grid-template-columns:repeat(auto-fill,minmax(var(--mmin,44%),1fr));gap:18px 12px}.nm{font-size:12.5px}
+ .jetzt{grid-template-columns:repeat(2,minmax(0,1fr))}.jz{min-height:92px}.jz b{font-size:28px}.jz:last-child:nth-child(odd){grid-column:1/-1}
+ .karten{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}.neu{grid-auto-columns:64%}
+ .post{grid-template-columns:minmax(0,1fr) auto;gap:4px 12px}.post>.mono{grid-column:1/-1}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<nav class="rail" id="rail" aria-label="Bereiche"></nav>
+<div class="schleier" id="schleier"></div>
+<div class="haupt">
+ <div class="bar">
+  <button class="menue" id="menue" aria-label="Menü öffnen"><svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M0 1h20M0 7h20M0 13h20" stroke="#1d1418" stroke-width="1.6"/></svg></button>
+  <label class="such"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11.2 11.2 15 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><input id="such" type="search" placeholder="Suchen: Theke, Oldenburg, Plakat, Kasse" aria-label="Alles durchsuchen" autocomplete="off"><kbd>⌘K</kbd></label>
+  <span class="barzahl mono" id="barzahl"></span>
+ </div>
+ <main id="m"><div class="start" style="min-height:40vh"></div></main>
+</div>
+<dialog id="lb" aria-label="Großansicht"><button class="schliess" id="lbzu" aria-label="Schließen">×</button><div class="lbg" tabindex="-1" autofocus><div class="buehne" id="buehne"></div><aside class="info" id="info"></aside></div></dialog>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const seg=k=>k.split('/').map(encodeURIComponent).join('/');
+const DU=(k,m)=>'d/'+seg(k)+(m?`?v=${m}`:'');
+const TU=(it,w=720)=>it.t==='vektor'?DU(it.k,it.m):`t/${w}/${seg(it.k)}?v=${it.m}`;
+const gr=b=>{if(!b)return'';if(b<1024)return b+' B';if(b<1048576)return Math.round(b/1024)+' KB';if(b<1073741824)return(b/1048576).toFixed(b<10485760?1:0).replace('.',',')+' MB';return(b/1073741824).toFixed(1).replace('.',',')+' GB'};
+const zahl=n=>Number(n).toLocaleString('de-DE');
+const lokal=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+// Gruppe: Punktfarbe, heller Grund für Karten ohne Bild, Farbe des Anfangsbuchstabens
+const GF={Agent:['#ff4005','#fff0e8','#ff4005'],Gebaut:['#4f0423','#f6ecf0','#4f0423'],Rohstoff:['#3b8bff','#eaf2ff','#3b8bff'],Wissen:['#e0b800','#fbf5d8','#8a6f00'],Vertraulich:['#1d1418','#efeaec','#1d1418'],Extern:['#b9aaa2','#f3eee9','#7b6470']};
+const gf=g=>GF[g]||GF.Gebaut;
+const SC={'Entwurf':'#d4a106','Freigegeben':'#1f9d55','Live mit noindex':'#1f9d55','Idee':'#a1969a'};
+const CI=[['Orange','#ff4005','Pantone 172 C','#fff'],['Aubergine','#4f0423','','#fff'],['Blau','#3b8bff','','#fff'],['Gelb','#fde233','','#1d1418'],['Creme','#fcfaf7','','#1d1418']];
+const STATUS={freigabe:'Wartet auf Freigabe',skript:'Dreh fehlt',wartet:'Wartet auf Daten',freigegeben:'Freigegeben',ueberarbeiten:'Überarbeiten',geplant:'Geplant',live:'Live'};
+const STC={freigabe:'#ff4005',skript:'#3b8bff',wartet:'#d4a106',freigegeben:'#1f9d55',ueberarbeiten:'#3b8bff',geplant:'#1f9d55',live:'#1d1418'};
+let K=null,S=null,LISTEN=[],LB=null,such=[],sprungAus=null;
+function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;($('#lb').open?$('#lb'):document.body).append(e);setTimeout(()=>e.remove(),2200)}
+function normal(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
+
+async function start(){
+ const [a,b]=await Promise.allSettled([fetch('api/katalog').then(r=>r.json()),fetch('api/stand').then(r=>r.json())]);
+ if(a.status!=='fulfilled'){location.replace('./#lock');return}
+ K=a.value;S=b.status==='fulfilled'?b.value:null;
+ for(const B of K.bereiche)for(const T of B.teile)for(const it of T.items)such.push({it,B,T,h:normal([it.n,it.k,B.titel,T.titel,it.s||''].join(' '))});
+ for(const B of K.bereiche)such.push({B,h:normal(B.titel+' '+(B.text||''))});
+ $('#barzahl').textContent=`${zahl(K.dateien)} Dateien · ${gr(K.bytes)}`;
+ rail();route();
+}
+function rail(){
+ const G={};for(const b of K.bereiche)(G[b.gruppe]=G[b.gruppe]||[]).push(b);
+ let h=`<a class="logo" href="#start" aria-label="Übersicht"><img src="${DU('101_Mmaah Wild Posting/marke/logo.svg')}" alt="Mmaah!" onerror="this.remove()"><span class="mono">Intern</span></a>`;
+ h+=`<div class="gr"><a class="pkt" data-z="start" href="#start"><span>Übersicht</span></a></div>`;
+ for(const g of Object.keys(G))h+=`<div class="gr"><h3><span class="dot" style="--d:${gf(g)[0]}"></span>${esc(g)}</h3>${G[g].map(b=>`<a class="pkt" data-z="${b.id}" href="#${b.id}"><span>${esc(b.titel)}</span>${b.n?`<i>${zahl(b.n)}</i>`:''}</a>`).join('')}</div>`;
+ h+=`<div class="fuss">Online Fassung, verschlüsselt auf GitHub. Ohne Code nicht lesbar, Bilder verkleinert, Videos in 720 p. <a href="./#lock" style="text-decoration:underline">Sperren</a></div>`;
+ $('#rail').innerHTML=h;
+}
+function markiere(id){document.querySelectorAll('.rail a.pkt').forEach(a=>{a.dataset.z===id?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')})}
+function route(){
+ if(!K)return;
+ document.body.classList.remove('nav');
+ const roh=location.hash.slice(1)||'start';const[a,...r]=roh.split('/');
+ LISTEN=[];
+ if(a==='suche'){const q=decodeURIComponent(r.join('/'));if($('#such').value!==q)$('#such').value=q;markiere('');return vSuche(q)}
+ if($('#such').value&&document.activeElement!==$('#such'))$('#such').value='';
+ const B=K.bereiche.find(b=>b.id===a);
+ if(!B){markiere('start');vStart()}
+ else if(B.art==='cockpit'){markiere(a);vCockpit(r[0])}
+ else if(r[0]==='d'){markiere(a);vDok(B,decodeURIComponent(r.slice(1).join('/')))}
+ else{markiere(a);vBereich(B)}
+ if(a!=='suche')scrollTo({top:0});
+}
+addEventListener('hashchange',route);
+
+/* Übersicht */
+function gruss(){const h=new Date().getHours();return h<11?'Guten Morgen':h<18?'Hallo':'Guten Abend'}
+function vStart(){
+ let z='';
+ if(S){const P=S.posts,w=P.filter(x=>x.status==='freigabe').length,d=P.filter(x=>x.status==='skript').length,o=S.offen.filter(x=>!x.erledigt).length;
+  z=`<div class="jetzt">${[['#cockpit/pass',w,'warten auf Freigabe','#ff4005'],['#cockpit/pass',d,'brauchen einen Dreh','#3b8bff'],['#eroeffnung',S.staedte.length,'Eröffnungen vorbereitet','#4f0423'],['#cockpit/offen',o,'Fragen an Mmaah','#e0b800'],['#cockpit/zahlen',S.tiktok.tage_seit_letztem,'Tage ohne TikTok','#ff4005',1]]
+   .map(([u,n,t,c,warn])=>`<a class="jz${warn?' warn':''}" href="${u}"><span><i class="dot" style="--d:${c}"></i>${t}</span><b>${zahl(n)}</b></a>`).join('')}</div>`}
+ // Neu: die Bereiche mit den jüngsten Änderungen zuerst, mit ihrem neuesten Bild, damit frische Arbeit nie unten versteckt liegt
+ const jetzt=Date.now()/1000,vor=m=>{const h=(jetzt-m)/3600;return h<1?'gerade eben':h<24?`vor ${Math.max(1,Math.round(h))} Std.`:h<48?'gestern':`vor ${Math.round(h/24)} Tagen`};
+ const neuA=K.bereiche.filter(b=>b.art!=='cockpit'&&b.gruppe!=='Vertraulich').map(b=>{let mx=0,best=null,neu=0;for(const T of b.teile)for(const it of T.items){if(it.m>mx)mx=it.m;if(it.m>jetzt-86400*3)neu++;if(['bild','video','pdf','vektor'].includes(it.t)&&!/^(Ü|Ue)bersicht/i.test(it.n)&&(!best||it.m>best.m))best=it}return{b,mx,best,neu}}).filter(x=>x.best).sort((a,b)=>b.mx-a.mx).slice(0,8);
+ const neuHtml=neuA.length?`<section class="woche"><header class="tk"><h2>Neu</h2><span class="mono">zuletzt geändert, neueste zuerst</span></header><div class="neu">${neuA.map(({b,mx,best,neu},i)=>{const g=gf(b.gruppe);return `<a class="karte" style="--i:${i}" href="#${b.id}"><span class="cv" style="--kb:${g[1]}"><img loading="lazy" src="${TU(best,720)}" alt="" onerror="this.remove()">${neu?`<span class="badge">${zahl(neu)} neu</span>`:''}</span><span class="kt"><span class="dot" style="--d:${g[0]}"></span><b>${esc(b.titel)}</b><i>${vor(mx)}</i></span></a>`}).join('')}</div></section>`:'';
+ let wo='';
+ if(S){const h=S.heute,na=S.posts.filter(p=>p.datum>=h&&['freigabe','skript','wartet','freigegeben','geplant'].includes(p.status)).sort((a,b)=>a.datum<b.datum?-1:1).slice(0,4);
+  if(na.length)wo=`<section class="woche"><header class="tk"><h2>Als Nächstes im Plan</h2><a class="mehr" href="#cockpit/plan">Ganzer Plan →</a></header><div class="liste">${na.map(p=>`<a class="post" href="#cockpit/pass"><span class="mono">${esc(new Date(p.datum+'T12:00').toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit'}))}</span><span class="pt"><b>${esc(p.hook)}</b><small>${esc(p.serie)}</small></span><span class="st"><i class="dot" style="--d:${STC[p.status]||'#a1969a'}"></i>${esc(STATUS[p.status]||p.status)}</span></a>`).join('')}</div></section>`}
+ const G={};for(const b of K.bereiche)(G[b.gruppe]=G[b.gruppe]||[]).push(b);
+ let i=0;
+ const karte=b=>{const g=gf(b.gruppe),c=b.cover,ag=b.art==='cockpit';
+  const bild=ag?'<img src="marke/daebak_256.png" alt="">':c?`<img loading="lazy" src="${TU(c,720)}" alt="" onerror="this.remove()">`:'';
+  return `<a class="karte" style="--i:${i++}" href="#${b.id}"><span class="cv${ag?' av':''}" style="--kb:${g[1]}"><span class="ini" style="--kt:${g[2]}">${esc([...b.titel][0])}</span>${bild}</span><span class="kt"><span class="dot" style="--d:${g[0]}"></span><b>${esc(b.titel)}</b>${b.n?`<i>${zahl(b.n)}</i>`:''}</span><small>${esc(b.text||'')}</small></a>`};
+ const alles=Object.entries(G).map(([g,L])=>`<div class="gruppe"><span class="dot" style="--d:${gf(g)[0]}"></span>${esc(g)}</div><div class="karten">${L.map(karte).join('')}</div>`).join('');
+ const onl=[['Website','https://nadercbz.github.io/mmaah-website/'],['Menuboard','https://nadercbz.github.io/mmaah-menuboard/'],['Gesamtboard','https://nadercbz.github.io/mmaah-board/'],['Cockpit Vorschau ohne Kasse','https://nadercbz.github.io/mmaah-agent/']];
+ LISTEN.push(K.zuletzt);
+ $('#m').innerHTML=`<section class="start"><p class="ober mono">${esc(new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}))} · ${zahl(K.dateien)} Dateien · ${gr(K.bytes)} · ${K.projekte} Projekte · Online Fassung</p><h1>${gruss()}, Nader.</h1><p class="sub">Alles zu Mmaah an einem Ort: was gebaut ist, was wartet und was noch fehlt.</p>${z}</section>
+ ${neuHtml}${wo}
+ <section class="woche"><header class="tk"><h2>Alle Bereiche</h2><span class="mono">${K.bereiche.length}</span></header>${alles}</section>
+ <section class="woche"><header class="tk"><h2>Online, mit noindex</h2></header><div class="liste">${onl.map(([t,u])=>`<a class="post zeile" href="${u}" target="_blank" rel="noopener"><span class="pt"><b>${esc(t)}</b><small class="mono">${esc(u.replace('https://',''))}</small></span><span class="st">↗</span></a>`).join('')}</div></section>
+ <section class="teil"><header class="tk"><h2>Zuletzt geändert</h2><span class="mono">${K.zuletzt.length}</span></header><div class="raster" style="--min:170px;--f:1/1">${K.zuletzt.map((it,i)=>kachel1(it,0,i)).join('')}</div></section><div class="ende"></div>`;
+ document.title='Mmaah! Intern';
+}
+
+/* Bereich */
+function band(B,z){const g=gf(B.gruppe);
+ const links=(B.links||[]).map(([t,u])=>{const ex=/^https?:/.test(u);return `<a class="tast" href="${esc(u)}"${u[0]==='#'?'':' target="_blank" rel="noopener"'}>${esc(t)}${ex?' ↗':''}</a>`}).join('');
+ const ord=B.ordner&&lokal?`<button class="tast" onclick="finder(null,'${esc(B.ordner).replace(/'/g,"\\'")}')">Ordner im Finder</button>`:'';
+ return `<header class="band"><div class="ober"><span class="grp"><span class="dot" style="--d:${g[0]}"></span>${esc(B.gruppe)}</span>${z?`<span>${zahl(z)} Dateien</span>`:''}${B.status?`<span class="pille" style="--sc:${SC[B.status]||'#a1969a'}">${esc(B.status)}</span>`:''}</div><h1>${esc(B.titel)}</h1>${B.text?`<p class="text">${esc(B.text)}</p>`:''}${B.hinweis?`<p class="hinweis">${esc(B.hinweis)}</p>`:''}${links||ord?`<div class="tasten">${links}${ord}</div>`:''}</header>`}
+function kachel1(it,l,i,T){const fm=(it.f||[]).map(x=>x.l.replace(' transparent','').replace('Druck ','').replace('Technik ','')).filter((v,n,a)=>a.indexOf(v)===n).slice(0,4).join(' ')||it.e.toUpperCase();
+ const prev=it.t==='bild'||it.t==='video'||it.t==='pdf'||it.t==='vektor'||it.t==='design';
+ return `<button class="kachel" data-l="${l}" data-i="${i}" ${it.t==='video'&&it.b<150000000?`data-v="${esc(DU(it.k,it.m))}"`:''} aria-label="${esc(it.n)} ansehen"><div class="bild${prev?'':' leer'}" data-e="${esc(it.e)}">${prev?`<img loading="lazy" decoding="async" src="${TU(it)}" alt="" onerror="this.parentNode.classList.add('leer');this.remove()">`:''}${it.t==='video'?'<span class="spiel"></span>':''}</div><span class="nm" title="${esc(it.n)}">${esc(it.n)}</span><span class="mt mono">${esc(fm)} · ${gr(it.b)}${it.o?` · ${esc(it.o)}`:''}</span></button>`}
+function dokzeile(B,it,l,i){const lesbar=['dok','tabelle','daten'].includes(it.t);const nm=esc(it.n);
+ const inhalt=`<b>${nm}</b><span class="mono">${esc(it.e.toUpperCase())} · ${gr(it.b)}</span>${it.z?`<small>${esc(it.z)}</small>`:'<small></small>'}`;
+ return lesbar?`<a class="dokz" href="#${B.id}/d/${encodeURIComponent(it.k)}">${inhalt}</a>`:`<button class="dokz" data-l="${l}" data-i="${i}">${inhalt}</button>`}
+function teil(B,T,ti){
+ const kopf=`<header class="tk"><h2>${esc(T.titel)}</h2>${T.items.length?`<span class="mono">${T.items.length}</span>`:''}</header>${T.text?`<p class="tt">${esc(T.text)}</p>`:''}`;
+ if(T.fehlt&&!T.items.length)return `<section class="teil" id="t${ti}">${kopf}<div class="fehlt">Liegt auf der Micro SSD. Platte anstecken und neu laden.</div></section>`;
+ if(T.art==='web')return `<section class="teil" id="t${ti}">${kopf}<div class="webbar"><button aria-pressed="true" onclick="breite(this,'100%')">Rechner</button><button aria-pressed="false" onclick="breite(this,'390px')">Handy</button><a href="${esc(T.src)}" target="_blank" rel="noopener">Eigener Tab ↗</a></div><div class="webrahmen${T.hoch?' hoch':''}"><iframe src="${esc(T.src)}" title="${esc(B.titel)}" loading="lazy"></iframe></div></section>`;
+ if(T.art==='farben')return `<section class="teil" id="t${ti}">${kopf}<div class="farben">${CI.map(c=>`<button class="farbe" style="background:${c[1]};color:${c[3]}" onclick="kopiere('${c[1]}')"><b>${c[0]}</b><span class="mono">${c[1]}${c[2]?` · ${c[2]}`:''}</span></button>`).join('')}</div></section>`;
+ const l=LISTEN.push(T.items.map(x=>Object.assign(x,{_T:T.titel,_B:B.titel,_tb:T.bg})))-1;
+ if(T.art==='doks')return `<section class="teil" id="t${ti}">${kopf}<div class="doks">${T.items.map((it,i)=>dokzeile(B,it,l,i)).join('')}</div></section>`;
+ const min=T.min||200;
+ return `<section class="teil" id="t${ti}">${kopf}<div class="raster" style="--min:${min}px;--mmin:${min>=300?'100%':'44%'};--f:${T.format||'1/1'};--fit:${T.fit||'contain'};${T.bg?`--tb:${T.bg}`:''}">${T.items.map((it,i)=>kachel1(it,l,i,T)).join('')}</div></section>`}
+function vBereich(B){
+ const tt=B.teile;
+ const sprung=tt.length>2?`<nav class="sprung" aria-label="Springen">${tt.map((t,i)=>`<a href="javascript:void 0" onclick="document.getElementById('t${i}').scrollIntoView();return false">${esc(t.titel)}</a>`).join('')}</nav>`:'';
+ const fehlt=B.fehlt?'<div class="teil"><div class="fehlt">Die Micro SSD ist gerade nicht angesteckt, deshalb fehlen hier Dateien. Platte anstecken und neu laden.</div></div>':'';
+ $('#m').innerHTML=band(B,B.n)+sprung+fehlt+tt.map((t,i)=>teil(B,t,i)).join('')+'<div class="ende"></div>';
+ document.title=B.titel+' · Mmaah! Intern';
+}
+function breite(btn,w){const r=btn.closest('.teil');r.querySelectorAll('.webbar button').forEach(b=>b.setAttribute('aria-pressed',b===btn));r.querySelector('iframe').style.width=w}
+function vCockpit(tab){const h=['pass','plan','eroeffnung','zahlen','offen'].includes(tab)?tab:'pass';
+ const f=$('#m iframe.vollrahmen');
+ if(f){f.contentWindow.location.hash=h;return}
+ $('#m').innerHTML=`<iframe class="vollrahmen" src="/cockpit#${h}" title="Cockpit"></iframe>`;document.title='Cockpit · Mmaah! Intern'}
+
+/* Texte */
+function md(t){
+ t=t.replace(/^---\n[\s\S]*?\n---\n/,'');
+ const inl=s=>esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/(^|[\s(])\*([^*\n]+)\*/g,'$1<em>$2</em>').replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'$1');
+ const Z=t.split('\n');let h='',i=0;
+ while(i<Z.length){let z=Z[i];
+  if(/^```/.test(z)){let c=[];i++;while(i<Z.length&&!/^```/.test(Z[i]))c.push(Z[i++]);i++;h+=`<pre><code>${esc(c.join('\n'))}</code></pre>`;continue}
+  let m;
+  if(m=z.match(/^(#{1,4})\s+(.*)/)){const n=Math.min(m[1].length,3);h+=`<h${n}>${inl(m[2])}</h${n}>`;i++;continue}
+  if(/^\s*\|/.test(z)&&i+1<Z.length&&/^\s*\|?[\s:|-]+\|/.test(Z[i+1])){const zeile=s=>s.trim().replace(/^\||\|$/g,'').split('|').map(x=>x.trim());
+   const kopf=zeile(z);i+=2;let r='';while(i<Z.length&&/^\s*\|/.test(Z[i])){r+=`<tr>${zeile(Z[i]).map(c=>`<td>${inl(c)}</td>`).join('')}</tr>`;i++}
+   h+=`<div class="tab"><table><thead><tr>${kopf.map(c=>`<th>${inl(c)}</th>`).join('')}</tr></thead><tbody>${r}</tbody></table></div>`;continue}
+  if(/^\s*[-*]\s+/.test(z)){let r='';while(i<Z.length&&/^\s*[-*]\s+/.test(Z[i])){r+=`<li>${inl(Z[i].replace(/^\s*[-*]\s+/,''))}</li>`;i++}h+=`<ul>${r}</ul>`;continue}
+  if(/^\s*\d+[.)]\s+/.test(z)){let r='';while(i<Z.length&&/^\s*\d+[.)]\s+/.test(Z[i])){r+=`<li>${inl(Z[i].replace(/^\s*\d+[.)]\s+/,''))}</li>`;i++}h+=`<ol>${r}</ol>`;continue}
+  if(/^>\s?/.test(z)){let r=[];while(i<Z.length&&/^>\s?/.test(Z[i]))r.push(Z[i++].replace(/^>\s?/,''));h+=`<blockquote>${inl(r.join(' '))}</blockquote>`;continue}
+  if(/^(-{3,}|\*{3,})\s*$/.test(z)||!z.trim()){i++;continue}
+  let r=[];while(i<Z.length&&Z[i].trim()&&!/^(#{1,4}\s|```|>\s?|\s*[-*]\s+|\s*\d+[.)]\s+|\s*\|)/.test(Z[i]))r.push(Z[i++]);
+  if(!r.length){h+=`<p>${inl(z)}</p>`;i++;continue}
+  h+=`<p>${inl(r.join(' '))}</p>`}
+ return h}
+function csvTab(t){const Zz=[];let f='',r=[],q=false;for(let i=0;i<t.length&&Zz.length<501;i++){const c=t[i];if(q){if(c==='"'&&t[i+1]==='"'){f+='"';i++}else if(c==='"')q=false;else f+=c}else if(c==='"')q=true;else if(c===','||c===';'){r.push(f);f=''}else if(c==='\n'){r.push(f);Zz.push(r);r=[];f=''}else if(c!=='\r')f+=c}
+ if(f||r.length){r.push(f);Zz.push(r)}const[k,...re]=Zz;
+ return `<div class="tab"><table><thead><tr>${k.map(x=>`<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${re.map(z=>`<tr>${z.map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${Zz.length>500?'<p class="mono">Nur die ersten 500 Zeilen, der Rest steht in der Datei.</p>':''}`}
+async function vDok(B,k){
+ let it=null;for(const T of B.teile){it=T.items.find(x=>x.k===k);if(it)break}
+ if(!it){location.hash=B.id;return}
+ $('#m').innerHTML=`<article class="dok${it.t==='tabelle'?' breit':''}"><a class="zurueck" href="#${B.id}">← ${esc(B.titel)}</a><div id="dokin">Lädt.</div></article>`;
+ window.scrollTo({top:0});document.title=it.n+' · Mmaah! Intern';
+ const leiste=`<div class="dokt"><a class="tast" href="${DU(k,it.m)}" download>Datei laden</a>${lokal?`<button class="tast" onclick="finder('${esc(k).replace(/'/g,"\\'")}')">Im Finder zeigen</button>`:''}<button class="tast" onclick="kopiere(pfadVon('${esc(k).replace(/'/g,"\\'")}'))">Pfad kopieren</button></div>`;
+ if(it.b>2500000&&it.t!=='tabelle'){$('#dokin').innerHTML=`<h1>${esc(it.n)}</h1>${leiste}<p>Zu groß zum Anzeigen (${gr(it.b)}). Bitte laden.</p>`;return}
+ const t=await(await fetch(DU(k,it.m))).text();
+ let inhalt;
+ if(it.t==='tabelle')inhalt=`<h1>${esc(it.n)}</h1>`+csvTab(t);
+ else if(it.t==='daten'){let p=t;try{p=JSON.stringify(JSON.parse(t),null,1)}catch{}inhalt=`<h1>${esc(it.n)}</h1><pre>${esc(p.slice(0,200000))}</pre>`}
+ else{inhalt=md(t);if(!/^<h1>/.test(inhalt))inhalt=`<h1>${esc(it.n)}</h1>`+inhalt}
+ const teile=inhalt.indexOf('</h1>')+5;
+ $('#dokin').innerHTML=inhalt.slice(0,teile)+leiste+inhalt.slice(teile);
+}
+
+/* Suche */
+function vSuche(q){
+ const w=normal(q).split(/\s+/).filter(Boolean);
+ document.title='Suche · Mmaah! Intern';
+ if(!w.length){$('#m').innerHTML='';return}
+ const tr=such.filter(x=>w.every(a=>x.h.includes(a)));
+ const bereiche=tr.filter(x=>!x.it),dat=tr.filter(x=>x.it);
+ const G=new Map();for(const x of dat){if(!G.has(x.B))G.set(x.B,[]);G.get(x.B).push(x)}
+ let h=`<header class="band"><div class="ober"><span class="grp">Suche</span><span>${zahl(dat.length)} Treffer</span></div><h1>„${esc(q)}“</h1>${bereiche.length?`<div class="tasten">${bereiche.map(x=>`<a class="tast" href="#${x.B.id}">${esc(x.B.titel)}</a>`).join('')}</div>`:''}</header>`;
+ if(!dat.length&&!bereiche.length)h+='<div class="teil"><p class="tt">Nichts gefunden. Weniger Wörter versuchen.</p></div>';
+ for(const[B,L]of G){const med=L.filter(x=>!['dok','tabelle','daten'].includes(x.it.t)).map(x=>Object.assign(x.it,{_T:x.T.titel,_B:B.titel,_tb:x.T.bg})),dok=L.filter(x=>['dok','tabelle','daten'].includes(x.it.t));
+  const l=LISTEN.push(med)-1;
+  h+=`<section class="teil"><header class="tk"><h2><a href="#${B.id}">${esc(B.titel)}</a></h2><span class="mono">${L.length}</span></header>`;
+  if(med.length)h+=`<div class="raster" style="--min:170px;--f:1/1">${med.slice(0,60).map((it,i)=>kachel1(it,l,i)).join('')}</div>`;
+  if(dok.length)h+=`<div class="doks">${dok.map(x=>{const it=x.it;let sn='';if(it.s){const n=normal(it.s),p=n.indexOf(w[0]);if(p>=0){const s=Math.max(p-50,0);sn=esc(it.s.slice(s,p+90)).replace(/\s+/g,' ')}}return `<a class="dokz" href="#${B.id}/d/${encodeURIComponent(it.k)}"><b>${esc(it.n)}</b><span class="mono">${esc(it.e.toUpperCase())}</span><small>${sn||esc(it.z||'')}</small></a>`}).join('')}</div>`;
+  h+='</section>'}
+ $('#m').innerHTML=h+'<div class="ende"></div>';
+}
+let suchT;$('#such').addEventListener('input',e=>{clearTimeout(suchT);suchT=setTimeout(()=>{const q=e.target.value.trim();const ziel=q?'#suche/'+encodeURIComponent(q):'#start';if(location.hash!==ziel)history.replaceState(null,'',ziel);route();scrollTo({top:0})},140)});
+addEventListener('keydown',e=>{if($('#lb').open)return;if((e.key==='/'||((e.metaKey||e.ctrlKey)&&e.key==='k'))&&document.activeElement!==$('#such')){e.preventDefault();$('#such').focus();$('#such').select()}if(e.key==='Escape'&&document.activeElement===$('#such')){$('#such').value='';$('#such').blur();location.hash='#start'}});
+
+/* Großansicht */
+function pfadVon(k){const w=k.startsWith('@')?k.split('/')[0]:'';return(K.basis[w]||'')+(w?k.slice(w.length+1):k)}
+async function kopiere(t){try{await navigator.clipboard.writeText(t);toast('Kopiert')}catch{toast(t)}}
+async function finder(k,ordner){const r=await fetch('/api/finder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k,ordner})}).catch(()=>null);toast(r&&r.ok?'Im Finder geöffnet':'Hat nicht geklappt')}
+function zeige(l,i){const L=LISTEN[l];if(!L||!L[i])return;LB={l,i};const it=L[i];
+ const b=$('#buehne');b.className='buehne';let m='';
+ const klein=matchMedia('(max-width:999px)').matches;
+ if(it.t==='bild')m=`<img id="lbbild" src="${TU(it,720)}" alt="${esc(it.n)}" onclick="vollbild(this,'${esc(DU(it.k,it.m)).replace(/'/g,"\\'")}')" onerror="this.src='${esc(DU(it.k,it.m)).replace(/'/g,"\\'")}';this.onerror=null">`;
+ else if(it.t==='vektor')m=`<img class="vek${it._tb==='#4f0423'?' dunkel':''}" src="${DU(it.k,it.m)}" alt="${esc(it.n)}">`;
+ else if(it.t==='video')m=`<video src="${DU(it.k,it.m)}" controls playsinline autoplay muted preload="metadata"></video>`;
+ else if(it.t==='pdf')m=klein?`<img src="${TU(it,1200)}" alt="${esc(it.n)}">`:`<iframe src="${DU(it.k,it.m)}#view=Fit" title="${esc(it.n)}"></iframe>`;
+ else if(it.t==='audio')m=`<audio src="${DU(it.k,it.m)}" controls></audio>`;
+ else if(it.t==='design')m=`<img src="${TU(it,1200)}" alt="${esc(it.n)}" onerror="this.outerHTML='<div class=typg>${esc(it.e)}</div>'">`;
+ else m=`<div class="typg">${esc(it.e)}</div>`;
+ b.innerHTML=m+`<button class="pfeil l" aria-label="Vorheriges" ${i?'':'disabled'} onclick="zeige(${l},${i-1})">‹</button><button class="pfeil r" aria-label="Nächstes" ${i<L.length-1?'':'disabled'} onclick="zeige(${l},${i+1})">›</button>`;
+ const fs=it.f||[{k:it.k,l:it.e.toUpperCase(),b:it.b,m:it.m}];
+ const q=s=>esc(s).replace(/'/g,"\\'");
+ $('#info').innerHTML=`<div class="wo mono">${esc(it._B||'')}${it._T?` · ${esc(it._T)}`:''}${L.length>1?` · ${i+1} von ${L.length}`:''}</div><h2>${esc(it.n)}</h2>
+ <div class="fass">${fs.map(f=>`<div class="fz"><span>${esc(f.l)}<small>${gr(f.b)}</small></span><a class="zwei" href="${DU(f.k,f.m)}" target="_blank" rel="noopener">Öffnen</a><a href="${DU(f.k,f.m)}" download>Laden</a></div>`).join('')}</div>
+ <div class="klein">${lokal?`<button onclick="finder('${q(it.k)}')">Im Finder zeigen</button>`:''}<button onclick="kopiere(pfadVon('${q(it.k)}'))">Pfad kopieren</button></div>
+ <div class="pfad mono">${esc(it.k)}</div>`;
+ if(it.t==='bild'){const g=new Image();g.onload=()=>{const x=$('#lbbild');if(x&&LB&&LB.l===l&&LB.i===i&&!b.classList.contains('voll'))x.src=g.src};g.src=TU(it,2000)}
+ const d=$('#lb');if(!d.open){sprungAus=document.activeElement;d.showModal();history.pushState({lb:1},'')}}
+function vollbild(img,u){if($('#buehne').classList.toggle('voll'))img.src=u}
+function schliesse(){if($('#lb').open)$('#lb').close()}
+$('#lbzu').onclick=schliesse;
+$('#lb').addEventListener('close',()=>{$('#buehne').innerHTML='';LB=null;if(history.state&&history.state.lb)history.back();if(sprungAus&&sprungAus.isConnected)sprungAus.focus()});
+addEventListener('popstate',()=>{if($('#lb').open)$('#lb').close()});
+addEventListener('keydown',e=>{if(!$('#lb').open||!LB)return;if(e.key==='ArrowLeft'&&LB.i>0)zeige(LB.l,LB.i-1);if(e.key==='ArrowRight'&&LB.i<LISTEN[LB.l].length-1)zeige(LB.l,LB.i+1)});
+document.addEventListener('click',e=>{const k=e.target.closest('[data-l]');if(k&&k.dataset.i!==undefined)zeige(+k.dataset.l,+k.dataset.i)});
+
+/* Video spielt beim Drüberfahren */
+if(matchMedia('(hover:hover)').matches){let hv;
+ document.addEventListener('pointerover',e=>{const k=e.target.closest('.kachel[data-v]');if(!k||k.querySelector('video'))return;clearTimeout(hv);hv=setTimeout(()=>{if(!k.matches(':hover'))return;const b=k.querySelector('.bild');const v=document.createElement('video');v.src=k.dataset.v;v.muted=true;v.loop=true;v.playsInline=true;v.style.cssText='position:absolute;inset:0';v.play().catch(()=>{});b.append(v);k.addEventListener('pointerleave',()=>v.remove(),{once:true})},260)})}
+
+/* Menü am Handy */
+$('#menue').onclick=()=>document.body.classList.toggle('nav');
+$('#schleier').onclick=()=>document.body.classList.remove('nav');
+if(innerWidth<560)$('#such').placeholder='Suchen';
+if(!/Mac|iPhone|iPad/.test(navigator.platform))document.querySelector('.such kbd').textContent='Strg K';
+start();
+</script></body></html>
